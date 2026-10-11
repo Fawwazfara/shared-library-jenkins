@@ -1,0 +1,22 @@
+# gitleaks configuration used by the securityScan step.
+# Point to it with: securityScan(type: 'go', gitleaks: [config: 'gitleaks.toml'])
+# or vendor a copy of this file at the repository root.
+
+title = "shared-library default gitleaks config"
+
+[extend]
+# Use the default ruleset shipped with gitleaks.
+useDefault = true
+
+[allowlist]
+description = "Global allowlist"
+paths = [
+    '''(?i)\.lock$''',
+    '''(?i)go\.sum$''',
+    '''(?i)package-lock\.json$''',
+    '''(?i)composer\.lock$''',
+    '''(?i).*_test\.go$''',
+    '''(?i)testdata/''',
+    '''(?i)\.env\.example$''',
+]
+regexTarget = "match"

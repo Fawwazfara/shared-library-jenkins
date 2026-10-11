@@ -1,0 +1,112 @@
+# Default configuration for the shared library.
+# This file mirrors org.devops.Config and is intended as documentation plus
+# an optional override source loaded via libraryResource('org/devops/defaults.yml').
+# Values here are the built-in fallbacks; per-job maps passed to the steps win.
+
+checkout:
+  url: ''
+  branch: ''
+  credentialsId: ''
+  changelog: true
+  poll: false
+  timeout: 15
+
+security:
+  enabled: true
+  failOnFindings: true
+  gitleaks:
+    enabled: true
+    image: zricethezav/gitleaks:latest
+    args: detect --source . --no-git --verbose --redact
+    config: ''
+  dependencyAudit:
+    enabled: true
+    failOnError: false
+
+docker:
+  enabled: true
+  registry: docker.io
+  registryProvider: ''        # '', dockerhub or ghcr (auto-detected when empty)
+  credentialsId: docker-registry-creds
+  imageName: ''
+  imageTag: ''
+  additionalTags: []
+  dockerfile: Dockerfile
+  context: .
+  buildArgs: {}
+  platform: ''
+  push: true
+  buildx: false
+  pullBaseImage: false
+  noCache: false
+  lintDockerfile:
+    enabled: false
+    image: hadolint/hadolint:latest
+  scanImage:
+    enabled: false
+    image: aquasec/trivy:latest
+    severity: HIGH,CRITICAL
+    exitCode: 1
+
+laravel:
+  phpImage: php:8.3-cli
+  composerImage: composer:2
+  nodeImage: node:20-alpine
+  installArgs: --no-interaction --prefer-dist --no-progress --optimize-autoloader
+  withNode: false
+  nodeInstallCmd: npm ci
+  nodeBuildCmd: npm run build
+  lint:
+    enabled: true
+    tool: pint
+    args: --test
+  staticAnalysis:
+    enabled: false
+    tool: phpstan
+    args: analyse --no-progress --level=max
+  test:
+    enabled: true
+    cmd: php artisan test
+  envFile: .env.example
+
+nodejs:
+  nodeImage: node:20-alpine
+  packageManager: npm
+  installCmd: ''
+  lint:
+    enabled: true
+    cmd: npm run lint
+  build:
+    enabled: false
+    cmd: npm run build
+  test:
+    enabled: true
+    cmd: npm test
+    coverage: false
+  audit:
+    enabled: true
+    level: high
+
+go:
+  goImage: golang:1.23-alpine
+  golangciImage: golangci/golangci-lint:v1.61-alpine
+  lint:
+    enabled: true
+    args: --timeout=5m
+  test:
+    enabled: true
+    cmd: go test ./... -race -coverprofile=coverage.out
+    coverage: true
+  build:
+    enabled: false
+    cmd: ''
+    output: bin/app
+  vuln:
+    enabled: true
+
+notifications:
+  enabled: false
+  slack:
+    enabled: false
+    channel: ''
+    credentialsId: ''

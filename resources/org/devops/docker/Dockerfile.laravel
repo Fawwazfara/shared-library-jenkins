@@ -1,0 +1,37 @@
+# Multi-stage Dockerfile template for Laravel / PHP-FPM + Nginx friendly image.
+# Copy to your project root as `Dockerfile` and adapt as needed.
+
+FROM composer:2 AS vendor
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --no-progress \
+    --optimize-autoloader \
+    --no-scripts
+
+FROM node:20-alpine AS frontend
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY resources ./resources
+COPY vite.config.* ./
+COPY . .
+RUN npm run build
+
+FROM php:8.3-fpm-alpine AS runtime
+WORKDIR /var/www/html
+
+RUN docker-php-ext-install pdo pdo_mysql opcache
+
+COPY --from=vendor /app/vendor ./vendor
+COPY . .
+COPY --from=frontend /app/public/build ./public/build
+
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+USER www-data
+EXPOSE 9000
+CMD ["php-fpm"]
