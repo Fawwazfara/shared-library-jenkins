@@ -48,8 +48,8 @@ class LaravelBuilder extends Builder implements Serializable {
         prepareEnvFile()
         String installArgs = cfg.installArgs ?: ''
         runIn(cfg.composerImage as String,
-              ["composer install ${installArgs}".toString()] as List<String>,
-              [label: 'composer install'])
+            ["composer install ${installArgs} --ignore-platform-reqs".toString()] as List<String>,
+            [label: 'composer install'])
     }
 
     private void prepareEnvFile() {
