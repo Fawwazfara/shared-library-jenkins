@@ -55,6 +55,7 @@ class LaravelBuilder extends Builder implements Serializable {
     private void prepareEnvFile() {
         String envFile = cfg.envFile as String
         if (envFile) {
+            // Jalankan cp .env menggunakan kontainer atau lewat script tanpa perintah php langsung
             utils.sh("test -f .env || cp ${envFile} .env", [allowFailure: true, quiet: true])
         }
     }

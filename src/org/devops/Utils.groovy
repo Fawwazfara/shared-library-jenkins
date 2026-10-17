@@ -138,7 +138,11 @@ class Utils implements Serializable {
         String envArgs = ''
         (opts.env ?: [:]).each { k, v -> envArgs += " -e ${k}=${v}" }
         String extra = opts.extra ?: ''
-        String cmd = "docker run --rm ${mount}${envArgs} ${extra} ${image} ${command}".toString()
+        // Bungkus dengan `sh -c` DAN paksa --entrypoint sh, karena kalau tidak
+        // operator shell (&&, ||, ;) dievaluasi oleh shell HOST Jenkins,
+        // bukan di dalam kontainer -> "php: not found" (exit 127).
+        String escaped = command.replace("'", "'\\''")
+        String cmd = "docker run --rm --entrypoint sh ${mount}${envArgs} ${extra} ${image} -c '${escaped}'".toString()
 
         Map shOpts = [script: cmd, label: opts.label ?: "docker run ${image}"]
         if (opts.returnStatus == true || opts.allowFailure == true) {
