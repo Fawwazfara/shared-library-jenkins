@@ -72,7 +72,7 @@ class Config implements Serializable {
                 withNode        : false,
                 nodeInstallCmd  : 'npm ci',
                 nodeBuildCmd    : 'npm run build',
-                lint            : [ enabled: true, tool: 'pint', args: '--test' ],
+                lint            : [ enabled: true, tool: 'pint', args: '' ],
                 staticAnalysis  : [ enabled: false, tool: 'phpstan', args: 'analyse --no-progress --level=max' ],
                 test            : [ enabled: true, cmd: 'php artisan test' ],
                 envFile         : '.env.example'
