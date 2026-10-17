@@ -65,7 +65,7 @@ class Config implements Serializable {
             ],
 
             laravel: [
-                phpImage        : 'php:8.3-cli',
+                phpImage        : 'php:8.4-cli',
                 composerImage   : 'composer:2',
                 nodeImage       : 'node:20-alpine',
                 installArgs     : '--no-interaction --prefer-dist --no-progress --optimize-autoloader',
