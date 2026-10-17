@@ -77,8 +77,7 @@ class LaravelBuilder extends Builder implements Serializable {
         Map test = cfg.test as Map
         String cmd = (test.cmd ?: 'php artisan test') as String
         runIn(cfg.phpImage as String, [
-            'php artisan key:generate --ansi --force',
-            cmd
+            "php artisan key:generate --ansi --force && ${cmd}".toString()
         ] as List<String>, [label: 'php artisan test'])
     }
 }
