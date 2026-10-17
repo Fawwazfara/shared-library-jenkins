@@ -131,7 +131,10 @@ class Utils implements Serializable {
 
     /** Run a docker-in-docker / host-socket image step safely. */
     Object dockerRun(String image, String command, Map opts = [:]) {
-        String mount = opts.workspace != false ? "-v \"\$(pwd):/workspace\" -w /workspace" : ''
+    // Terjemahkan path workspace container ke path host laptop kamu
+        String hostWorkspace = script.WORKSPACE.replace('/var/jenkins_home', '/home/phaethon/jenkins_home')
+    
+        String mount = opts.workspace != false ? "-v \"${hostWorkspace}:/workspace\" -w /workspace" : ''
         String envArgs = ''
         (opts.env ?: [:]).each { k, v -> envArgs += " -e ${k}=${v}" }
         String extra = opts.extra ?: ''
