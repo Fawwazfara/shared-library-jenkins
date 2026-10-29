@@ -70,7 +70,7 @@ class Config implements Serializable {
                 nodeImage       : 'node:20-alpine',
                 installArgs     : '--no-interaction --prefer-dist --no-progress --optimize-autoloader',
                 withNode        : false,
-                nodeInstallCmd  : 'npm ci',
+                nodeInstallCmd  : 'npm ci || npm install',
                 nodeBuildCmd    : 'npm run build',
                 lint            : [ enabled: true, tool: 'pint', args: '' ],
                 staticAnalysis  : [ enabled: false, tool: 'phpstan', args: 'analyse --no-progress --level=max' ],
