@@ -44,6 +44,6 @@ class NodeJSBuilder extends Builder implements Serializable {
         String pm = (cfg.packageManager ?: 'npm') as String
         if (pm == 'yarn') return 'yarn install --frozen-lockfile'
         if (pm == 'pnpm') return 'corepack enable && pnpm install --frozen-lockfile'
-        return 'npm ci || npm install'
+        return 'npm install'
     }
 }

@@ -15,7 +15,7 @@ RUN composer install \
 FROM node:20-alpine AS frontend
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY resources ./resources
 COPY vite.config.* ./
 COPY . .
